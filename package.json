@@ -1,13 +1,14 @@
 {
   "name": "zotero-autonote",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "private": true,
   "description": "Generate AI-assisted child notes for Zotero items with PDF attachments.",
   "license": "MIT",
   "scripts": {
     "test": "node --test tests/*.test.js",
     "build": "./build.sh",
-    "check": "npm test && npm run build"
+    "check": "npm test && npm run build",
+    "prepare-release": "npm run check && node scripts/generate-updates.js"
   },
   "engines": {
     "node": ">=20"

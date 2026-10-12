@@ -35,10 +35,16 @@ Zotero AutoNote 是一个面向 Zotero 10.0.x 的开源插件。它会在新条�
 ```bash
 npm test
 npm run build
-unzip -t dist/zotero-autonote-0.2.7.xpi
+unzip -t dist/zotero-autonote-0.2.8.xpi
 ```
 
-生成的安装包位于 `dist/zotero-autonote-0.2.7.xpi`。
+生成的安装包位于 `dist/zotero-autonote-0.2.8.xpi`。
+
+## 自动更新
+
+从 0.2.8 开始，插件会通过仓库根目录的 `updates.json` 检查 GitHub Release。安装 0.2.7 或更早版本的用户需要手动安装 0.2.8 一次；之后发布更高版本时，Zotero 才能自动发现更新。
+
+每次发布都必须上传 `npm run prepare-release` 生成的同一份 XPI，不能重新构建后换一个文件，否则 SHA-256 将不匹配。
 
 ## 配置
 
@@ -73,6 +79,7 @@ API key 当前保存在本机 Zotero profile 的偏好设置中，并未使用�
 npm test
 npm run build
 npm run check
+npm run prepare-release
 ```
 
 GitHub Actions 会在 push 和 pull request 时自动运行测试、构建并检查 XPI。

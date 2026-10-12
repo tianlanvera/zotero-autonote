@@ -2,6 +2,12 @@
 
 All notable changes to Zotero AutoNote are documented here.
 
+## 0.2.8 - 2026-10-12
+
+- Add a public Zotero update manifest hosted from the GitHub repository.
+- Add release metadata generation with the XPI SHA-256 hash.
+- Enable automatic updates for installations starting with this version.
+
 ## 0.2.7 - 2026-10-12
 
 - Prepare the project for public GitHub hosting.

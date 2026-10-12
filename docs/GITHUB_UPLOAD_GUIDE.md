@@ -17,7 +17,7 @@ cd /PATH/TO/zotero-autonote
 ```bash
 npm test
 npm run build
-unzip -t dist/zotero-autonote-0.2.7.xpi
+unzip -t dist/zotero-autonote-0.2.8.xpi
 ```
 
 三个命令都成功后再继续。不要把任何真实 API key 写入源码、README、issue 或提交记录。
@@ -157,25 +157,23 @@ shasum -a 256 dist/zotero-autonote-0.2.7.xpi
 
 ```bash
 npm test
-npm run build
+npm run prepare-release
 git add .
 git commit -m "Release 0.2.8"
 git push
 ```
 
-最后在 GitHub Releases 创建对应的 `v0.2.8` 标签并上传新 XPI。
+`npm run prepare-release` 会构建 XPI，并按该 XPI 的真实 SHA-256 更新仓库根目录的 `updates.json`。最后在 GitHub Releases 创建对应的 `v0.2.8` 标签，上传这次刚生成的 `dist/zotero-autonote-0.2.8.xpi`。不要在生成 `updates.json` 后再次构建并上传另一份文件。
 
-## 10. 可选：配置自动更新
+## 10. 自动更新机制
 
-当前公开整理版没有写死 GitHub 地址，也没有启用自动更新。这样可以避免仓库还没创建时留下无效 URL。
+从 0.2.8 开始，`manifest.json` 中的 `applications.zotero.update_url` 指向：
 
-等仓库地址确定后，可以再完成以下工作：
+```text
+https://raw.githubusercontent.com/tianlanvera/zotero-autonote/main/updates.json
+```
 
-1. 在 `manifest.json` 增加真实 `homepage_url`。
-2. 创建 Zotero `updates.json`。
-3. 将 `applications.zotero.update_url` 指向该文件的稳定 HTTPS 地址。
-4. 在 `updates.json` 中填写 Release XPI 的下载地址、版本兼容范围和 SHA-256。
-5. 再发布一个新版本，不要替换已发布版本的 XPI 内容。
+Zotero 会读取该文件，比较版本号与兼容范围，再从对应的 GitHub Release 下载 XPI。0.2.7 的 XPI 没有更新地址，因此已经安装 0.2.7 的用户需要手动升级到 0.2.8 一次。从 0.2.8 起，后续版本才能自动更新。
 
 ## 常见问题
 
