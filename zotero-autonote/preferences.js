@@ -1,0 +1,3 @@
+var ZoteroAutoNotePreferences = {
+  init() {}
+};

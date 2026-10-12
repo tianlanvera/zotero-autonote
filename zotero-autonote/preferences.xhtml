@@ -1,0 +1,40 @@
+<vbox>
+  <groupbox>
+    <label><html:h2>Zotero AutoNote</html:h2></label>
+    <html:p>Automatically create a child note only when a regular Zotero item has a PDF attachment. Manual generation works with or without a PDF.</html:p>
+
+    <checkbox label="Enable automatic notes" preference="extensions.zotero-autonote.enabled"/>
+  </groupbox>
+
+  <groupbox>
+    <label><html:h2>AI service</html:h2></label>
+
+    <html:label for="zotero-autonote-endpoint">Endpoint</html:label>
+    <html:input id="zotero-autonote-endpoint" type="text" preference="extensions.zotero-autonote.endpoint"/>
+
+    <html:label for="zotero-autonote-api-key">API key</html:label>
+    <html:input id="zotero-autonote-api-key" type="password" preference="extensions.zotero-autonote.apiKey"/>
+
+    <html:label for="zotero-autonote-model">Model</html:label>
+    <html:input id="zotero-autonote-model" type="text" preference="extensions.zotero-autonote.model"/>
+  </groupbox>
+
+  <groupbox>
+    <label><html:h2>Note behavior</html:h2></label>
+
+    <html:label for="zotero-autonote-delay">Delay after import, seconds</html:label>
+    <html:input id="zotero-autonote-delay" type="number" min="0" preference="extensions.zotero-autonote.delaySeconds"/>
+
+    <html:label for="zotero-autonote-automatic-max-age">Maximum automatic item age, minutes</html:label>
+    <html:input id="zotero-autonote-automatic-max-age" type="number" min="0" preference="extensions.zotero-autonote.automaticMaxDateAddedAgeMinutes"/>
+
+    <html:label for="zotero-autonote-max-fulltext">Maximum indexed attachment characters</html:label>
+    <html:input id="zotero-autonote-max-fulltext" type="number" min="0" preference="extensions.zotero-autonote.maxFullTextChars"/>
+
+    <html:label for="zotero-autonote-language">Output language</html:label>
+    <html:input id="zotero-autonote-language" type="text" preference="extensions.zotero-autonote.language"/>
+
+    <html:label for="zotero-autonote-prompt">Prompt</html:label>
+    <html:textarea id="zotero-autonote-prompt" rows="8" preference="extensions.zotero-autonote.prompt"/>
+  </groupbox>
+</vbox>

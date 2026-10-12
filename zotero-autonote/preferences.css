@@ -1,0 +1,12 @@
+#zotero-autonote-endpoint,
+#zotero-autonote-api-key,
+#zotero-autonote-model,
+#zotero-autonote-language,
+#zotero-autonote-prompt {
+  width: 36em;
+  max-width: 100%;
+}
+
+#zotero-autonote-prompt {
+  min-height: 10em;
+}
