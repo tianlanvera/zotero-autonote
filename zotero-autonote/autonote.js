@@ -7,6 +7,7 @@ ZoteroAutoNote = {
   timers: new Map(),
   running: new Set(),
   activeItems: new Set(),
+  noticeTimes: new Map(),
   menuIDs: [],
 
   PREF_PREFIX: "extensions.zotero-autonote.",
@@ -47,6 +48,7 @@ ZoteroAutoNote = {
     this.timers.clear();
     this.running.clear();
     this.activeItems.clear();
+    this.noticeTimes.clear();
     this.log("Stopped");
   },
 
@@ -162,13 +164,36 @@ ZoteroAutoNote = {
     );
   },
 
-  onNotify(event, type, ids) {
-    if (event !== "add" || type !== "item" || !this.getPref("enabled")) {
+  async onNotify(event, type, ids) {
+    if (type !== "item" || !this.getPref("enabled")) {
       return;
     }
 
-    for (let id of ids) {
-      this.enqueue(id);
+    if (event === "add") {
+      for (let id of ids) {
+        this.enqueue(id);
+      }
+      return;
+    }
+
+    if (event === "modify") {
+      for (let id of ids) {
+        await this.enqueueModifiedPDFParent(id);
+      }
+    }
+  },
+
+  async enqueueModifiedPDFParent(itemID) {
+    try {
+      let attachment = await Zotero.Items.getAsync(itemID);
+      if (!this.isPDFAttachment(attachment) || !attachment.parentItemID) {
+        return;
+      }
+      this.log(`PDF attachment ${itemID} changed; checking parent ${attachment.parentItemID}`);
+      this.enqueue(attachment.parentItemID, { delaySeconds: 0 });
+    }
+    catch (err) {
+      this.log(`Could not inspect modified attachment ${itemID}: ${err}`);
     }
   },
 
@@ -199,8 +224,13 @@ ZoteroAutoNote = {
     try {
       let item = await Zotero.Items.getAsync(itemID);
       if (item && item.isAttachment && item.isAttachment()) {
-        if (!this.isPDFAttachment(item) || !item.parentItemID) {
-          return { status: "skipped", reason: "not-parented-pdf" };
+        if (!this.isPDFAttachment(item)) {
+          result = { status: "skipped", reason: "not-pdf-attachment" };
+          return result;
+        }
+        if (!item.parentItemID) {
+          result = { status: "skipped", reason: "pdf-parent-unavailable" };
+          return result;
         }
         item = await Zotero.Items.getAsync(item.parentItemID);
       }
@@ -219,7 +249,8 @@ ZoteroAutoNote = {
       let retryAttempt = Math.max(0, Number(options.retryAttempt) || 0);
       let retryable = result && (
         result.reason === "no-pdf-attachment" ||
-        result.reason === "pdf-text-unavailable"
+        result.reason === "pdf-text-unavailable" ||
+        result.reason === "pdf-parent-unavailable"
       );
       if (retryable && retryAttempt < this.PDF_RETRY_DELAYS_SECONDS.length) {
         let delaySeconds = this.PDF_RETRY_DELAYS_SECONDS[retryAttempt];
@@ -234,6 +265,14 @@ ZoteroAutoNote = {
       }
       else if (retryable) {
         this.log(`PDF remained unavailable for item ${targetItemID}; automatic retries exhausted`);
+        this.showNoticeOnce(
+          `pdf-unavailable:${targetItemID}`,
+          "Zotero AutoNote",
+          "The PDF was added, but its readable text was still unavailable. You can reindex the PDF or generate the note manually."
+        );
+      }
+      else if (result && result.status === "failed") {
+        this.showAutomaticFailure(targetItemID, result.reason);
       }
     }
 
@@ -474,6 +513,37 @@ ZoteroAutoNote = {
     );
     await note.saveTx();
     return note;
+  },
+
+  showAutomaticFailure(itemID, reason) {
+    let description = reason === "missing-api-key"
+      ? "No API key is configured on this computer. Open Zotero AutoNote settings and enter the endpoint, API key, and model."
+      : "The automatic AI request failed. Check the endpoint, API key, model, network connection, and provider balance, then try manual generation.";
+    this.showNoticeOnce(
+      `automatic-failure:${itemID}:${reason === "missing-api-key" ? reason : "request"}`,
+      "Zotero AutoNote",
+      description
+    );
+  },
+
+  showNoticeOnce(key, headline, description) {
+    let now = Date.now();
+    let lastShown = this.noticeTimes.get(key) || 0;
+    if (now - lastShown < 60000) {
+      return;
+    }
+    this.noticeTimes.set(key, now);
+
+    try {
+      let progress = new Zotero.ProgressWindow();
+      progress.changeHeadline(headline);
+      progress.addDescription(description);
+      progress.show();
+      progress.startCloseTimer(10000);
+    }
+    catch (err) {
+      this.log(`Could not show automatic-generation notice: ${err}`);
+    }
   },
 
   parseZoteroDate(value) {

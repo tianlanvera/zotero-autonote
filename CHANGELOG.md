@@ -2,6 +2,12 @@
 
 All notable changes to Zotero AutoNote are documented here.
 
+## 0.2.9 - 2026-10-13
+
+- Recheck parent items when PDF attachments are modified during download or indexing.
+- Retry PDF attachments that are added before Zotero finishes assigning their parent item.
+- Show visible notices for missing local API configuration, AI request failures, and exhausted PDF retries.
+
 ## 0.2.8 - 2026-10-12
 
 - Add a public Zotero update manifest hosted from the GitHub repository.

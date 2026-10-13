@@ -187,6 +187,51 @@ test("PDF readiness failures schedule a retry for the parent item", async () => 
   assert.equal(queued.options.delaySeconds, 30);
 });
 
+test("a modified PDF attachment immediately rechecks its parent item", async () => {
+  const pdf = {
+    id: 41,
+    parentItemID: 40,
+    attachmentContentType: "application/pdf",
+    isPDFAttachment: () => true
+  };
+  const plugin = loadPlugin({
+    Items: { getAsync: async () => pdf }
+  });
+  plugin.getPref = (name) => name === "enabled";
+  let queued;
+  plugin.enqueue = (itemID, options) => {
+    queued = { itemID, options };
+  };
+
+  await plugin.onNotify("modify", "item", [41]);
+
+  assert.equal(queued.itemID, 40);
+  assert.equal(queued.options.delaySeconds, 0);
+});
+
+test("an unparented PDF attachment is retried while Zotero finishes importing it", async () => {
+  const pdf = {
+    id: 51,
+    parentItemID: null,
+    attachmentContentType: "application/pdf",
+    isAttachment: () => true,
+    isPDFAttachment: () => true
+  };
+  const plugin = loadPlugin({
+    Items: { getAsync: async () => pdf }
+  });
+  let queued;
+  plugin.enqueue = (itemID, options) => {
+    queued = { itemID, options };
+  };
+
+  const result = await plugin.processItem(51, { retryAttempt: 0 });
+
+  assert.equal(result.reason, "pdf-parent-unavailable");
+  assert.equal(queued.itemID, 51);
+  assert.equal(queued.options.retryAttempt, 1);
+});
+
 test("Zotero SQL dates are parsed as UTC", () => {
   const plugin = loadPlugin();
   const date = plugin.parseZoteroDate("2026-10-12 11:43:21");

@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Zotero AutoNote",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Automatically creates AI notes for Zotero items with PDFs, with manual generation for any regular item.",
   "author": "Zotero AutoNote contributors",
   "homepage_url": "https://github.com/tianlanvera/zotero-autonote",

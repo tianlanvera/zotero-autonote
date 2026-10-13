@@ -5,7 +5,7 @@ Zotero AutoNote 是一个面向 Zotero 10.0.x 的开源插件。它会在新条�
 ## 功能
 
 - 新增条目含 PDF 时自动生成阅读笔记。
-- PDF 尚未下载或全文索引未完成时，按 30 秒、1、2、4、8 分钟自动重试。
+- PDF 尚未下载或全文索引未完成时，按 30 秒、1、2、4、8 分钟自动重试；PDF 下载或索引状态变化时也会立即重新检查。
 - 自动生成只使用 PDF 附件文本，不会在 PDF 全文为空时发送生成请求。
 - 支持从条目右键菜单或 Tools 菜单手动生成；手动模式不要求存在 PDF。
 - 自动跳过已经包含 AutoNote 笔记的条目。
@@ -35,10 +35,10 @@ Zotero AutoNote 是一个面向 Zotero 10.0.x 的开源插件。它会在新条�
 ```bash
 npm test
 npm run build
-unzip -t dist/zotero-autonote-0.2.8.xpi
+unzip -t dist/zotero-autonote-0.2.9.xpi
 ```
 
-生成的安装包位于 `dist/zotero-autonote-0.2.8.xpi`。
+生成的安装包位于 `dist/zotero-autonote-0.2.9.xpi`。
 
 ## 自动更新
 
