@@ -1,7 +1,7 @@
 pref("extensions.zotero-autonote.enabled", true);
-pref("extensions.zotero-autonote.endpoint", "https://api.openai.com/v1/chat/completions");
+pref("extensions.zotero-autonote.endpoint", "https://api.deepseek.com/chat/completions");
 pref("extensions.zotero-autonote.apiKey", "");
-pref("extensions.zotero-autonote.model", "gpt-4o-mini");
+pref("extensions.zotero-autonote.model", "deepseek-flash");
 pref("extensions.zotero-autonote.delaySeconds", 30);
 pref("extensions.zotero-autonote.automaticMaxDateAddedAgeMinutes", 180);
 pref("extensions.zotero-autonote.maxFullTextChars", 12000);

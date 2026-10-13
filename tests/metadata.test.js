@@ -16,9 +16,26 @@ const updates = JSON.parse(fs.readFileSync(
   path.join(root, "updates.json"),
   "utf8"
 ));
+const defaultPrefs = fs.readFileSync(
+  path.join(root, "zotero-autonote", "prefs.js"),
+  "utf8"
+);
 
 test("package and plugin versions match", () => {
   assert.equal(packageJSON.version, manifest.version);
+});
+
+test("release metadata identifies veraxia as the author", () => {
+  assert.equal(manifest.author, "veraxia");
+  assert.equal(packageJSON.author, "veraxia");
+});
+
+test("fresh installations default to DeepSeek Flash", () => {
+  assert.match(
+    defaultPrefs,
+    /endpoint", "https:\/\/api\.deepseek\.com\/chat\/completions"/
+  );
+  assert.match(defaultPrefs, /model", "deepseek-flash"/);
 });
 
 test("manifest uses the public repository and update manifest", () => {

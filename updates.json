@@ -3,9 +3,9 @@
     "zotero-autonote@example.com": {
       "updates": [
         {
-          "version": "0.2.9",
-          "update_link": "https://github.com/tianlanvera/zotero-autonote/releases/download/v0.2.9/zotero-autonote-0.2.9.xpi",
-          "update_hash": "sha256:f9dc73113ede42a9223e35c10b7eb2102467788d357dc50fdb6e7e424b3d09f3",
+          "version": "0.2.10",
+          "update_link": "https://github.com/tianlanvera/zotero-autonote/releases/download/v0.2.10/zotero-autonote-0.2.10.xpi",
+          "update_hash": "sha256:5deafb7a4fae4f2f2e0fb9bc62bb8c4a967ebcfb2f6ad7e3db46d76ff274e188",
           "applications": {
             "zotero": {
               "strict_min_version": "10.0",

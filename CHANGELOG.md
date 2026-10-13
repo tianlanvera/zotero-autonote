@@ -2,6 +2,12 @@
 
 All notable changes to Zotero AutoNote are documented here.
 
+## 0.2.10 - 2026-10-13
+
+- Set the plugin author and copyright holder to veraxia.
+- Use the official DeepSeek Chat Completions endpoint by default.
+- Use `deepseek-flash` as the default model.
+
 ## 0.2.9 - 2026-10-13
 
 - Recheck parent items when PDF attachments are modified during download or indexing.
@@ -16,8 +22,7 @@ All notable changes to Zotero AutoNote are documented here.
 
 ## 0.2.7 - 2026-10-12
 
-- Prepare the project for public GitHub hosting.
-- Add an MIT license, security guidance, contribution instructions, CI, and release documentation.
+- Add an MIT license, security guidance, contribution instructions, and CI.
 - Remove placeholder homepage and update URLs.
 - Declare compatibility with the tested Zotero 10.0 release line.
 
