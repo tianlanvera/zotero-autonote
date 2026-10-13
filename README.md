@@ -85,3 +85,7 @@ GitHub Actions 会在 push 和 pull request 时自动运行测试、构建并检
 
 [MIT](LICENSE)
 
+## 联系与反馈
+
+如有问题或建议，可通过 QQ 联系：1509463343。
+
